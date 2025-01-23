@@ -49,12 +49,13 @@ $ yarn dev
 
 $ mkdir backend
 $ cd backend
-$ python -m venv .env
-$ source .env/bin/activate
+$ python -m venv venv
+$ source venv/bin/activate
+$ pip freeze > requirements.txt
+
+Use `pip install -r requirements.txt`
 
 ### Add pre-commit/linting
 
-$ pip install pre-commit ruff bandit isort flake8
-$ Copy .pre-commit-config.yml, pyproject.toml, .isort.cfg
-$ pre-commit install
-
+$ Copy .pre-commit-config.yaml (in top-level dir)
+$ Copy pyproject.toml
