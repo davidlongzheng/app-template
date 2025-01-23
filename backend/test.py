@@ -2,8 +2,9 @@ long_text = "qljwekfjlqkwejfklqjwelkfjqweklfjlkqwejflkjqwelkfjqlkwefjlkqwejfkljq
 
 
 def main():
-	print("hello")
+    print("asdf")
+    print("hello")
 
 
 if __name__ == "__main__":
-	main()
+    main()
