@@ -35,7 +35,7 @@ $ yarn dev
 
 - Python: language
 - pip/venv: virtual env, package manager
-- flake8/bandit/isort/ruff: linting
+- ruff: linting
 - pre-commit: pre-commit hooks
 - FastAPI: web framework
 - Pydantic V2: data validation
@@ -57,5 +57,6 @@ Use `pip install -r requirements.txt`
 
 ### Add pre-commit/linting
 
-$ Copy .pre-commit-config.yaml (in top-level dir)
-$ Copy pyproject.toml
+$ Copy .pre-commit-config.yaml (configures pre-commit to use ruff) (in top-level dir)
+$ Copy pyproject.toml (configures ruff)
+
