@@ -2,17 +2,23 @@
 
 ## Initial setup
 
-1. Create git repo
+### Create git repo
 ```
 $ mkdir my_project
 $ git init
 ```
-```
-```
+
 
 ## Frontend
 
-1. Initialize next app
+- Typescript: language
+- ESLint: linting
+- yarn: package managemer
+- Turbopack: bundler
+- React + NextJS: frontend framework
+- TailwindCSS: CSS framework
+
+### Initialize next app
 $ yarn create next-app frontend --typescript
 
 ✔ Would you like to use ESLint? … No / Yes
@@ -22,4 +28,33 @@ $ yarn create next-app frontend --typescript
 ✔ Would you like to use Turbopack for `next dev`? … No / Yes
 ✔ Would you like to customize the import alias (`@/*` by default)? … No / Yes
 
-2. 
+### Run next app
+$ yarn dev
+
+## Backend
+
+- Python: language
+- pip/venv: virtual env, package manager
+- flake8/bandit/isort/ruff: linting
+- pre-commit: pre-commit hooks
+- FastAPI: web framework
+- Pydantic V2: data validation
+- SQLAlchemy 2.0: ORM
+- PostgreSQL: relational database
+- Alembic: database migrations
+- Docker: containerization
+- Pytest: unit testing
+
+### Virtual Environment
+
+$ mkdir backend
+$ cd backend
+$ python -m venv .env
+$ source .env/bin/activate
+
+### Add pre-commit/linting
+
+$ pip install pre-commit ruff bandit isort flake8
+$ Copy .pre-commit-config.yml, pyproject.toml, .isort.cfg
+$ pre-commit install
+
