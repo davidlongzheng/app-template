@@ -1,11 +1,14 @@
-# How to create a web app
+# Web App Template
 
 ## Initial setup
 
 ### Create git repo
 
+```
 $ mkdir my_project
+$ cd my_project
 $ git init
+```
 
 ### VSCode Extensions
 
@@ -29,9 +32,14 @@ $ git init
 
 #### Misc
 
-- Code Spell Checker - spell checking
 - Jupyter - support for jupyter notebooks
 
+#### VSCode Settings
+
+- Copy .vscode/settings.json
+- This will turn on auto format on save
+- This will set the default Python interpreter to the one in the venv
+- This will add ./backend to the PYTHONPATH for Python tools like linters.
 
 ## Frontend
 
@@ -43,6 +51,7 @@ $ git init
 - TailwindCSS: CSS framework
 
 ### Initialize next app
+
 $ yarn create next-app frontend --typescript
 
 ✔ Would you like to use ESLint? … No / Yes
@@ -53,8 +62,10 @@ $ yarn create next-app frontend --typescript
 ✔ Would you like to customize the import alias (`@/*` by default)? … No / Yes
 
 ### Run next app
-$ yarn dev
 
+```
+$ yarn dev
+```
 
 ## Backend
 
@@ -62,31 +73,109 @@ $ yarn dev
 - pip/venv: virtual env, package manager
 - ruff: linting
 - pre-commit: pre-commit hooks
+- loguru: logging
 - FastAPI: web framework
 - Pydantic V2: data validation
 - SQLAlchemy 2.0: ORM
 - PostgreSQL: relational database
 - Alembic: database migrations
-- Docker: containerization
-- Pytest: unit testing
+- Docker/Docker Compose: containerization
+- pytest: unit testing
 
 ### Virtual Environment
 
+```
 $ mkdir backend
 $ cd backend
-$ python -m venv venv
+$ pyenv local 3.12.8
+$ pyenv exec python -m venv venv
 $ source venv/bin/activate
 $ pip freeze > requirements.txt
+```
+
 - Use `pip install -r requirements.txt`
+- Copy backend/.gitignore
+- Copy backend/venv/lib/python3.12/site-packages/app.pth. This adds backend/ to sys.path for all scripts using virtualenv.
 
-### Add pre-commit/linting
+### pre-commit/linting/formatting/type checking
 
-- Copy .pre-commit-config.yaml (configures pre-commit to use ruff) (in top-level dir)
+- Copy .pre-commit-config.yaml (configures pre-commit to use ruff and mypy)
 - Copy pyproject.toml (configures ruff)
+
+```
 $ pip install pre-commit ruff
-$ pre-commit install # to install pre-commit dependencies
-Test by committing to git.
+$ pre-commit install # to install pre-commit
+```
 
-### Add FastAPI
+- Test by committing to git.
 
+### Task
 
+- Copy Taskfile.yml
+- pip install go-task-bin
+
+### FastAPI
+
+```
+$ pip install fastapi uvicorn
+```
+
+- Copy app/
+- Rough structure
+  .
+  └── app/
+  ├── backend/ # Backend functionality and configs
+  | ├── config.py # Configuration settings
+  │ └── session.py # Database session manager
+  ├── models/ # SQLAlchemy models
+  │ ├── auth.py # Authentication models
+  | ├── base.py # Base classes, mixins
+  | └── ... # Other service models
+  ├── routers/ # API routes
+  | ├── auth.py # Authentication routers
+  │ └── ... # Other service routers
+  ├── schemas/ # Pydantic models
+  | ├── auth.py  
+   │ └── ...
+  ├── services/ # Business logic
+  | ├── auth.py # Create user, generate and verify tokens
+  | ├── base.py # Base classes, mixins
+  │ └── ...
+  ├── cli.py # Command-line utilities
+  ├── const.py # Constants
+  ├── exc.py # Exception handlers
+  └── main.py # Application runner
+
+An API request will go through main.py -> routers/ -> schemas/ -> services/ -> models/ -> backend/
+
+- .env file
+  Copy .env file and populate with your own env var info. This can be used to store facts about the backend app as well as any API/DB secrets.
+
+### Testing
+
+Run `pytest` to do testing.
+
+### PostgreSQL/Docker
+
+```
+$ docker compose up -d postgres
+```
+
+This will:
+
+- Start a PostgreSQL container
+- Create a volume for persistent data
+- Expose port 5432
+- Set up the database with credentials from .env
+
+You can manage the database using these commands:
+
+```
+$ task db:up    # Start the database
+$ task db:down  # Stop the database
+$ task db:logs  # View database logs
+```
+
+### Alembic
+
+TODO

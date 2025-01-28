@@ -1,0 +1,40 @@
+# https://taskfile.dev
+
+version: "3"
+tasks:
+  #################################################################################
+  #
+  #                                  DATABASE
+  #
+  #################################################################################
+  db:up:
+    desc: Start the database
+    cmds:
+      - docker compose up -d postgres
+
+  db:down:
+    desc: Stop the database
+    cmds:
+      - docker compose down
+
+  db:logs:
+    desc: Show database logs
+    cmds:
+      - docker compose logs -f postgres
+
+  db:connect:
+    desc: Connect to database
+    cmds:
+      - psql -h localhost -p 5432 -U postgres -d app
+
+  #################################################################################
+  #
+  #                                  Dev
+  #
+  #################################################################################
+
+  dev:api:
+    desc: Start the API server
+    cmds:
+      - uvicorn app.main:app --reload
+
