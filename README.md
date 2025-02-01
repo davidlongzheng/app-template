@@ -1,5 +1,15 @@
 # Web App Template
 
+## Quick setup
+
+- git clone this repo.
+- rm -rf .git/
+- git init
+- run ./setup.sh
+- `yarn dev` to run frontend
+- `task dev:api` to run backend app (activate venv first)
+- `task db:up` to run database
+
 ## Initial setup
 
 ### Create git repo
@@ -54,12 +64,12 @@ $ git init
 
 $ yarn create next-app frontend --typescript
 
-✔ Would you like to use ESLint? … No / Yes
-✔ Would you like to use Tailwind CSS? … No / Yes
-✔ Would you like your code inside a `src/` directory? … No / Yes
-✔ Would you like to use App Router? (recommended) … No / Yes
-✔ Would you like to use Turbopack for `next dev`? … No / Yes
-✔ Would you like to customize the import alias (`@/*` by default)? … No / Yes
+✔ Would you like to use ESLint? Yes
+✔ Would you like to use Tailwind CSS? Yes
+✔ Would you like your code inside a `src/` directory? No
+✔ Would you like to use App Router? (recommended) No
+✔ Would you like to use Turbopack for `next dev`? Yes
+✔ Would you like to customize the import alias (`@/*` by default)? No
 
 ### Run next app
 
@@ -90,20 +100,19 @@ $ cd backend
 $ pyenv local 3.12.8
 $ pyenv exec python -m venv venv
 $ source venv/bin/activate
-$ pip freeze > requirements.txt
 ```
 
+- Copy requirements.txt
 - Use `pip install -r requirements.txt`
 - Copy backend/.gitignore
 - Copy backend/venv/lib/python3.12/site-packages/app.pth. This adds backend/ to sys.path for all scripts using virtualenv.
 
 ### pre-commit/linting/formatting/type checking
 
-- Copy .pre-commit-config.yaml (configures pre-commit to use ruff and mypy)
-- Copy pyproject.toml (configures ruff)
+- Copy .pre-commit-config.yaml (in root dir) (configures pre-commit to use ruff and mypy)
+- Copy pyproject.toml (in backend/) (configures ruff)
 
 ```
-$ pip install pre-commit ruff
 $ pre-commit install # to install pre-commit
 ```
 
@@ -112,7 +121,6 @@ $ pre-commit install # to install pre-commit
 ### Task
 
 - Copy Taskfile.yml
-- pip install go-task-bin
 
 ### FastAPI
 
@@ -153,7 +161,8 @@ An API request will go through main.py -> routers/ -> schemas/ -> services/ -> m
 
 ### Testing
 
-Run `pytest` to do testing.
+- Copy tests/
+- Run `pytest` to do testing.
 
 ### PostgreSQL/Docker
 
@@ -182,7 +191,6 @@ $ task db:logs  # View database logs
 - Use alembic to create your tables for the first time.
 
 ```
-$ pip install asyncpg alembic
 $ alembic init alembic --template async
 $ modify alembic/env.py to have target_metadata = SQLModel.metadata
 $ modify alembic.ini to not set sqlalchemy.url and set instead in alembic/env.py
@@ -190,10 +198,3 @@ $ alembic revision -m "create initial tables" # create migration script to creat
 $ alembic upgrade head # do migration.
 ```
 
-TODO:
-
-- seed database
-- test views in API
-- Add simple frontend for movies/
-- test our testing suite.
-- Look into ETL scripts and task automation (celery?)
