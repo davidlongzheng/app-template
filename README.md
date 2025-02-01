@@ -3,9 +3,9 @@
 ## Quick setup
 
 - git clone this repo.
-- rm -rf .git/
-- git init
-- run ./setup.sh
+- `rm -rf .git/``
+- `git init`
+- run `./setup.sh`
 - `yarn dev` to run frontend
 - `task dev:api` to run backend app (activate venv first)
 - `task db:up` to run database
@@ -130,6 +130,7 @@ $ pip install fastapi uvicorn
 
 - Copy app/
 - Rough structure
+```
   .
   └── app/
   ├── backend/ # Backend functionality and configs
@@ -153,6 +154,7 @@ $ pip install fastapi uvicorn
   ├── const.py # Constants
   ├── exc.py # Exception handlers
   └── main.py # Application runner
+```
 
 An API request will go through main.py -> routers/ -> schemas/ -> services/ -> models/ -> backend/
 
