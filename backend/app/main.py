@@ -9,6 +9,7 @@ from app.routers import (
     main,
     movies,
 )
+from app.backend.middleware import setup_cors
 from app.version import __version__
 
 app = FastAPI(
@@ -17,6 +18,7 @@ app = FastAPI(
     version=__version__,
     swagger_ui_parameters={"defaultModelsExpandDepth": -1},
 )
+setup_cors(app)
 
 app.include_router(main.router)
 app.include_router(auth.router)

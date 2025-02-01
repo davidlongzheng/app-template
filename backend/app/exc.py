@@ -1,10 +1,11 @@
 import inspect
+from typing import NoReturn
 
 from fastapi.exceptions import HTTPException
 from loguru import logger
 
 
-def raise_with_log(status_code: int, detail: str) -> None:
+def raise_with_log(status_code: int, detail: str) -> NoReturn:
     """Wrapper function for logging and raising exceptions."""
 
     desc = f"<HTTPException status_code={status_code} detail={detail}>"

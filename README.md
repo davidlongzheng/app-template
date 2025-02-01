@@ -45,7 +45,7 @@ $ git init
 
 - Typescript: language
 - ESLint: linting
-- yarn: package managemer
+- yarn: package manager
 - Turbopack: bundler
 - React + NextJS: frontend framework
 - TailwindCSS: CSS framework
@@ -165,8 +165,9 @@ This will:
 
 - Start a PostgreSQL container
 - Create a volume for persistent data
-- Expose port 5432
+- Expose port for the database
 - Set up the database with credentials from .env
+- If you need to choose a different port, you can change the port in the .env file. Make sure to also update the port in the Taskfile.yml file.
 
 You can manage the database using these commands:
 
@@ -178,4 +179,21 @@ $ task db:logs  # View database logs
 
 ### Alembic
 
-TODO
+- Use alembic to create your tables for the first time.
+
+```
+$ pip install asyncpg alembic
+$ alembic init alembic --template async
+$ modify alembic/env.py to have target_metadata = SQLModel.metadata
+$ modify alembic.ini to not set sqlalchemy.url and set instead in alembic/env.py
+$ alembic revision -m "create initial tables" # create migration script to create initial tables.
+$ alembic upgrade head # do migration.
+```
+
+TODO:
+
+- seed database
+- test views in API
+- Add simple frontend for movies/
+- test our testing suite.
+- Look into ETL scripts and task automation (celery?)

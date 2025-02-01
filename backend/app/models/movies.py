@@ -5,7 +5,6 @@ from app.models.base import SQLModel
 
 class MovieModel(SQLModel):
     __tablename__ = "movies"
-    __table_args__ = {"schema": "api"}
 
     movie_id: Mapped[int] = mapped_column("movie_id", primary_key=True)
     title: Mapped[str] = mapped_column("title")

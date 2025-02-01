@@ -1,24 +1,19 @@
-from contextlib import contextmanager
-from typing import Iterator
+from contextlib import asynccontextmanager
+from typing import AsyncGenerator
 
-from sqlalchemy import create_engine
-from sqlalchemy.orm import (
-    Session,
-    sessionmaker,
-)
+from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 
 from app.backend.config import config
 
 # create session factory to generate new database sessions
-SessionFactory = sessionmaker(
-    bind=create_engine(config.database.url),
-    autocommit=False,
-    autoflush=False,
+SessionFactory = async_sessionmaker(
+    create_async_engine(config.database.url),
+    class_=AsyncSession,
     expire_on_commit=False,
 )
 
 
-def create_session() -> Iterator[Session]:
+async def create_session() -> AsyncGenerator[AsyncSession, None]:
     """Create new database session.
 
     Yields:
@@ -29,20 +24,12 @@ def create_session() -> Iterator[Session]:
 
     try:
         yield session
-        session.commit()
+        await session.commit()
     except Exception:
-        session.rollback()
+        await session.rollback()
         raise
     finally:
-        session.close()
+        await session.close()
 
 
-@contextmanager
-def open_session() -> Iterator[Session]:
-    """Create new database session with context manager.
-
-    Yields:
-        Database session.
-    """
-
-    return create_session()
+open_session = asynccontextmanager(create_session)

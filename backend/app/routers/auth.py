@@ -3,7 +3,7 @@ from fastapi import (
     Depends,
 )
 from fastapi.security import OAuth2PasswordRequestForm
-from sqlalchemy.orm import Session
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.backend.session import create_session
 from app.const import (
@@ -19,7 +19,7 @@ router = APIRouter(prefix="/" + AUTH_URL, tags=AUTH_TAGS)
 @router.post("", response_model=TokenSchema)
 async def authenticate(
     login: OAuth2PasswordRequestForm = Depends(),
-    session: Session = Depends(create_session),
+    session: AsyncSession = Depends(create_session),
 ) -> TokenSchema | None:
     """User authentication.
 
@@ -31,4 +31,4 @@ async def authenticate(
         Access token.
     """
 
-    return AuthService(session).authenticate(login)
+    return await AuthService(session).authenticate(login)

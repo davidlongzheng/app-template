@@ -12,8 +12,8 @@ from fastapi.security import (
     OAuth2PasswordRequestForm,
 )
 from jose import (
-    jwt,
     JWTError,
+    jwt,
 )
 from passlib.context import CryptContext
 from sqlalchemy import select
@@ -37,13 +37,14 @@ from app.services.base import (
     BaseService,
 )
 
-
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 oauth2_schema = OAuth2PasswordBearer(tokenUrl=AUTH_URL, auto_error=False)
 
 
-async def get_current_user(token: str = Depends(oauth2_schema)) -> UserSchema | None:
+async def get_current_user(
+    token: str | None = Depends(oauth2_schema),
+) -> UserSchema | None:
     """Decode token to obtain user information.
 
     Extracts user information from token and verifies expiration time.
@@ -63,15 +64,14 @@ async def get_current_user(token: str = Depends(oauth2_schema)) -> UserSchema | 
 
     try:
         # decode token using secret token key provided by config
-        payload = jwt.decode(token, config.token_key, algorithms=[TOKEN_ALGORITHM])
+        payload: dict[str, str] = jwt.decode(
+            token, config.token_key, algorithms=[TOKEN_ALGORITHM]
+        )
 
         # extract encoded information
-        name: str = payload.get("name")
-        sub: str = payload.get("sub")
-        expires_at: str = payload.get("expires_at")
-
-        if sub is None:
-            raise_with_log(status.HTTP_401_UNAUTHORIZED, "Invalid credentials")
+        name: str = payload["name"]
+        sub: str = payload["sub"]
+        expires_at: str = payload["expires_at"]
 
         if is_expired(expires_at):
             raise_with_log(status.HTTP_401_UNAUTHORIZED, "Token expired")
@@ -80,13 +80,11 @@ async def get_current_user(token: str = Depends(oauth2_schema)) -> UserSchema | 
     except JWTError:
         raise_with_log(status.HTTP_401_UNAUTHORIZED, "Invalid credentials")
 
-    return None
-
 
 def is_expired(expires_at: str) -> bool:
     """Return :obj:`True` if token has expired."""
 
-    return datetime.strptime(expires_at, "%Y-%m-%d %H:%M:%S") < datetime.utcnow()
+    return datetime.strptime(expires_at, "%Y-%m-%d %H:%M:%S") < datetime.now()
 
 
 class HashingMixin:
@@ -108,7 +106,7 @@ class HashingMixin:
 class AuthService(HashingMixin, BaseService):
     """Authentication service."""
 
-    def create_user(self, user: CreateUserSchema) -> None:
+    async def create_user(self, user: CreateUserSchema) -> None:
         """Add user with hashed password to database."""
 
         user_model = UserModel(
@@ -117,9 +115,9 @@ class AuthService(HashingMixin, BaseService):
             hashed_password=self.bcrypt(user.password),
         )
 
-        AuthDataManager(self.session).add_user(user_model)
+        await AuthDataManager(self.session).add_user(user_model)
 
-    def authenticate(
+    async def authenticate(
         self, login: OAuth2PasswordRequestForm = Depends()
     ) -> TokenSchema | None:
         """Generate token.
@@ -129,7 +127,7 @@ class AuthService(HashingMixin, BaseService):
         token is generated, otherwise the corresponding exception is raised.
         """
 
-        user = AuthDataManager(self.session).get_user(login.username)
+        user = await AuthDataManager(self.session).get_user(login.username)
 
         if user.hashed_password is None:
             raise_with_log(status.HTTP_401_UNAUTHORIZED, "Incorrect password")
@@ -161,15 +159,15 @@ class AuthService(HashingMixin, BaseService):
 
 
 class AuthDataManager(BaseDataManager):
-    def add_user(self, user: UserModel) -> None:
+    async def add_user(self, user: UserModel) -> None:
         """Write user to database."""
 
-        self.add_one(user)
+        await self.add_one(user)
 
-    def get_user(self, email: str) -> UserSchema:
+    async def get_user(self, username: str) -> UserSchema:
         """Read user from database."""
 
-        model = self.get_one(select(UserModel).where(UserModel.email == email))
+        model = await self.get_one(select(UserModel).where(UserModel.name == username))
 
         if not isinstance(model, UserModel):
             raise_with_log(status.HTTP_404_NOT_FOUND, "User not found")

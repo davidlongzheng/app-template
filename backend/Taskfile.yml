@@ -27,6 +27,11 @@ tasks:
     cmds:
       - psql -h localhost -p 5432 -U postgres -d app
 
+  db:seed:
+    desc: Seed the database
+    cmds:
+      - psql -h localhost -p 5432 -U postgres -d app -f app/seed_db.sql
+
   #################################################################################
   #
   #                                  Dev

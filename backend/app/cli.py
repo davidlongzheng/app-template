@@ -1,3 +1,5 @@
+import asyncio
+
 import click
 
 from app.backend.session import open_session
@@ -32,6 +34,13 @@ def create_user(name: str, email: str, password: str) -> None:
     # initialize user schema
     user = CreateUserSchema(name=name, email=email, password=password)
 
-    # write to database
-    with open_session() as session:
-        AuthService(session).create_user(user)
+    async def _create_user():
+        async with open_session() as session:
+            await AuthService(session).create_user(user)
+
+    # Run the async function in the event loop
+    asyncio.run(_create_user())
+
+
+if __name__ == "__main__":
+    main()

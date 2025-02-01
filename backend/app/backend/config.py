@@ -20,6 +20,12 @@ class DatabaseConfig(BaseModel):
     url: str
 
 
+class CORSConfig(BaseSettings):
+    allow_origins: list[str] = ["http://localhost:3001"]  # Frontend URL
+    allow_methods: list[str] = ["*"]
+    allow_headers: list[str] = ["*"]
+
+
 class Config(BaseSettings):
     """API configuration parameters.
 
@@ -32,10 +38,14 @@ class Config(BaseSettings):
             Instance of :class:`app.backend.config.DatabaseConfig`.
         token_key:
             Random secret key used to sign JWT tokens.
+        cors:
+            CORS configuration settings.
+            Instance of :class:`app.backend.config.CORSConfig`.
     """
 
     database: DatabaseConfig = Field()
     token_key: str
+    cors: CORSConfig = CORSConfig()
 
     model_config = SettingsConfigDict(
         env_file=".env",

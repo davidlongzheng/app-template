@@ -9,7 +9,7 @@ from sqlalchemy import (
     func,
     select,
 )
-from sqlalchemy.orm import Session
+from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.sql.expression import Executable
 
 from app.models.base import SQLModel
@@ -18,7 +18,7 @@ from app.models.base import SQLModel
 class SessionMixin:
     """Provides instance of database session."""
 
-    def __init__(self, session: Session) -> None:
+    def __init__(self, session: AsyncSession) -> None:
         self.session = session
 
 
@@ -29,19 +29,23 @@ class BaseService(SessionMixin):
 class BaseDataManager(SessionMixin):
     """Base data manager class responsible for operations over database."""
 
-    def add_one(self, model: Any) -> None:
+    async def add_one(self, model: Any):
         self.session.add(model)
+        await self.session.commit()
 
-    def add_all(self, models: Sequence[Any]) -> None:
+    async def add_all(self, models: Sequence[Any]) -> None:
         self.session.add_all(models)
+        await self.session.commit()
 
-    def get_one(self, select_stmt: Executable) -> Any:
-        return self.session.scalar(select_stmt)
+    async def get_one(self, select_stmt: Executable) -> Any:
+        result = await self.session.execute(select_stmt)
+        return result.scalar()
 
-    def get_all(self, select_stmt: Executable) -> List[Any]:
-        return list(self.session.scalars(select_stmt).all())
+    async def get_all(self, select_stmt: Executable) -> List[Any]:
+        result = await self.session.execute(select_stmt)
+        return list(result.scalars().all())
 
-    def get_from_tvf(self, model: Type[SQLModel], *args: Any) -> List[Any]:
+    async def get_from_tvf(self, model: Type[SQLModel], *args: Any) -> List[Any]:
         """Query from table valued function.
 
         This is a wrapper function that can be used to retrieve data from
@@ -59,10 +63,10 @@ class BaseDataManager(SessionMixin):
                 z: Mapped[float] = mapped_column("z")
 
             # equivalent to "SELECT x, y, z FROM schema.function(1, 'AAA')"
-            BaseDataManager(session).get_from_tvf(MyModel, 1, "AAA")
+            await BaseDataManager(session).get_from_tvf(MyModel, 1, "AAA")
         """
 
-        return self.get_all(self.select_from_tvf(model, *args))
+        return await self.get_all(self.select_from_tvf(model, *args))
 
     @staticmethod
     def select_from_tvf(model: Type[SQLModel], *args: Any) -> Executable:
