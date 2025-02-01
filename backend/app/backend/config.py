@@ -21,7 +21,7 @@ class DatabaseConfig(BaseModel):
 
 
 class CORSConfig(BaseSettings):
-    allow_origins: list[str] = ["http://localhost:3001"]  # Frontend URL
+    allow_origins: list[str] = ["http://localhost:3000"]  # Frontend URL
     allow_methods: list[str] = ["*"]
     allow_headers: list[str] = ["*"]
 

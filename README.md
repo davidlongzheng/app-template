@@ -2,6 +2,7 @@
 
 ## Quick setup
 
+Only quick setup will get you the fully correct template.
 - `git clone` this repo.
 - `rm -rf .git/`
 - `git init`
@@ -11,7 +12,7 @@
 - `task db:up` to run database
 - `pre-commit install` to install pre-commit
 
-## Initial setup
+## Git and VSCode
 
 ### Create git repo
 
