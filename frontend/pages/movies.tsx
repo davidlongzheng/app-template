@@ -38,7 +38,7 @@ export default function MoviesPage() {
       <div className="flex flex-col gap-4">
         <h1 className="text-4xl font-bold tracking-tight">Popular Movies</h1>
         <p className="text-muted-foreground">
-          Discover highly-rated movies released since 1990
+          Discover movies released since 1990
         </p>
       </div>
 

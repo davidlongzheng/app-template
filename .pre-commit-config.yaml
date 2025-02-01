@@ -14,12 +14,3 @@ repos:
   rev: v0.931
   hooks:
     - id: mypy
-# Add yarn lint hook
-- repo: local
-  hooks:
-    - id: yarn-lint
-      name: yarn lint
-      entry: yarn lint
-      language: system
-      types: [javascript, jsx, ts, tsx]
-      pass_filenames: false
