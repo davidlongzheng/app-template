@@ -160,11 +160,6 @@ An API request will go through main.py -> routers/ -> schemas/ -> services/ -> m
 - .env file
   Copy .env file and populate with your own env var info. This can be used to store facts about the backend app as well as any API/DB secrets.
 
-### Testing
-
-- Copy tests/
-- Run `pytest` to do testing.
-
 ### PostgreSQL/Docker
 
 ```
@@ -198,4 +193,9 @@ $ modify alembic.ini to not set sqlalchemy.url and set instead in alembic/env.py
 $ alembic revision -m "create initial tables" # create migration script to create initial tables.
 $ alembic upgrade head # do migration.
 ```
+
+### Testing
+
+- Copy tests/
+- Run `pytest` to do testing.
 
