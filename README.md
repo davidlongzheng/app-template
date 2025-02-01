@@ -2,13 +2,14 @@
 
 ## Quick setup
 
-- git clone this repo.
-- `rm -rf .git/``
+- `git clone` this repo.
+- `rm -rf .git/`
 - `git init`
 - run `./setup.sh`
 - `yarn dev` to run frontend
 - `task dev:api` to run backend app (activate venv first)
 - `task db:up` to run database
+- `pre-commit install` to install pre-commit
 
 ## Initial setup
 
@@ -62,14 +63,16 @@ $ git init
 
 ### Initialize next app
 
-$ yarn create next-app frontend --typescript
+`$ yarn create next-app frontend --typescript`
 
+```
 ✔ Would you like to use ESLint? Yes
 ✔ Would you like to use Tailwind CSS? Yes
 ✔ Would you like your code inside a `src/` directory? No
 ✔ Would you like to use App Router? (recommended) No
 ✔ Would you like to use Turbopack for `next dev`? Yes
 ✔ Would you like to customize the import alias (`@/*` by default)? No
+```
 
 ### Run next app
 
@@ -102,20 +105,16 @@ $ pyenv exec python -m venv venv
 $ source venv/bin/activate
 ```
 
-- Copy requirements.txt
+- Copy `requirements.txt`
 - Use `pip install -r requirements.txt`
-- Copy backend/.gitignore
-- Copy backend/venv/lib/python3.12/site-packages/app.pth. This adds backend/ to sys.path for all scripts using virtualenv.
+- Copy `backend/.gitignore`
+- Copy `backend/venv/lib/python3.12/site-packages/app.pth`. This adds backend/ to sys.path for all scripts using virtualenv.
 
 ### pre-commit/linting/formatting/type checking
 
-- Copy .pre-commit-config.yaml (in root dir) (configures pre-commit to use ruff and mypy)
-- Copy pyproject.toml (in backend/) (configures ruff)
-
-```
-$ pre-commit install # to install pre-commit
-```
-
+- Copy `.pre-commit-config.yaml` (in root dir) (configures pre-commit to use ruff and mypy)
+- Copy `pyproject.toml` (in backend/) (configures ruff)
+- `pre-commit install` to install pre-commit
 - Test by committing to git.
 
 ### Task
@@ -145,7 +144,7 @@ $ pip install fastapi uvicorn
   │ └── ... # Other service routers
   ├── schemas/ # Pydantic models
   | ├── auth.py  
-   │ └── ...
+  │ └── ...
   ├── services/ # Business logic
   | ├── auth.py # Create user, generate and verify tokens
   | ├── base.py # Base classes, mixins
