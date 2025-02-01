@@ -7,10 +7,11 @@ Only quick setup will get you the fully correct template.
 - `rm -rf .git/`
 - `git init`
 - run `./setup.sh`
-- `yarn dev` to run frontend
-- `task dev:api` to run backend app (activate venv first)
-- `task db:up` to run database
-- `pre-commit install` to install pre-commit
+- `yarn dev` to run frontend (in frontend/)
+- `task dev:api` to run backend app (in backend/) (activate venv first)
+- `task db:up` to run database (in backend/)
+- Go to localhost:3000/movies to see if frontend, API, and db work.
+- Run `pytest` in backend/ to see if test suite works.
 
 ## Git and VSCode
 
@@ -200,3 +201,6 @@ $ alembic upgrade head # do migration.
 - Copy tests/
 - Run `pytest` to do testing.
 
+## TODO
+
+- get pytest to pass properly
